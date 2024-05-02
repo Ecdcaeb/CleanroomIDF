@@ -2,7 +2,6 @@
 
 CleanroomIDF is a template for the development with cleanroom, based on [IdeallandFramework](https://github.com/IdeallandEarthDept/IdeallandFramework), [TemplateDevEnv](https://github.com/CleanroomMC/TemplateDevEnv/tree/master) and [1.12.2-FG6-Template](https://github.com/kappa-maintainer/1.12.2-FG6-Template)
 
-Click `Use this template` or download the codes for the setup.
 
 ### About the branchs
 
@@ -17,3 +16,14 @@ the branchs start with `_` is the contribution to upstream, do not use!
 ### About the action
 
 The action is used for check.
+
+You can edit it for you own mod build.
+
+### How to use
+
+1. Click `use this template` at the top.
+2. Clone the repository you have created with this template.
+3. In the local repository, run the command `gradlew setupDecompWorkspace`
+4. Open the project folder in IDEA.
+5. Right-click in IDEA `build.gradle` of your project, and select `Link Gradle Project`, after completion, hit `Refresh All` in the gradle tab on the right.
+6. Run `gradlew runClient` and `gradlew runServer`, or use the auto-imported run configurations in IntelliJ like `1. Run Client`.
