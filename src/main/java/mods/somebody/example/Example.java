@@ -11,6 +11,6 @@ import org.apache.logging.log4j.Logger;
 public class Example {
     public static final String MODID = "modid";
     
-    public static Logger LOGGER = LogManager.getLogger(.MOD_NAME);
+    public static Logger LOGGER = LogManager.getLogger(MOD_NAME);
 
 }
