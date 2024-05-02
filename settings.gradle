@@ -5,6 +5,10 @@ pluginManagement {
             name = 'MinecraftForge'
             url = 'https://maven.minecraftforge.net/'
         }
+        maven{
+            name = 'OutLands'
+            url = 'https://maven.outlands.top/releases'
+        }
     }
 }
 
