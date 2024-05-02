@@ -21,7 +21,7 @@ buildscript {
         if (use_mirror == 'true') {
             //use mirror maven later, but try orgin for fail trying
             maven { url "https://maven.aliyun.com/nexus/content/groups/public" }
-            maven { url "https://${mirror_maven_url}" }
+            maven { url "https://${propertyString('mirror_maven_url')}" }
         }
     }
     dependencies {
@@ -37,7 +37,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'java'
 
-version = "1.12.2-${mod_version}"
+version = "1.12.2-${propertyString('mod_version')}"
 group = root_package
 archivesBaseName = mod_name
 
@@ -51,7 +51,7 @@ minecraft {
 
 
     if(propertyBool('use_access_transformer')){
-        accessTransformer = file('src/main/resources/META-INF/${access_transformer_locations}')
+        accessTransformer = file('src/main/resources/META-INF/${propertyString('access_transformer_locations')}')
     }
 
     legacy {
@@ -79,11 +79,11 @@ minecraft {
         client {
             workingDirectory project.file('run/client')
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            //property 'forge.enabledGameTestNamespaces', mod_id
+            //property 'forge.enabledGameTestNamespaces', propertyString('mod_id')
 
 
             mods {
-                "${mod_id}" {
+                "${propertyString('mod_id')}" {
                     source sourceSets.main
                 }
             }
@@ -91,12 +91,12 @@ minecraft {
 
         server {
             workingDirectory project.file('run/server')
-            //property 'forge.enabledGameTestNamespaces', mod_id
+            //property 'forge.enabledGameTestNamespaces', propertyString('mod_id')
             args '--nogui'
 
 
             mods {
-                "${mod_id}" {
+                "${propertyString('mod_id')}" {
                     source sourceSets.main
                 }
             }
