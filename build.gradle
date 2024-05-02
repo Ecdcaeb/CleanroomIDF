@@ -13,7 +13,7 @@ setDefaultProperty 'mapping_version', true, '39'
 
 buildscript {
     repositories {
-        if (propertyBool('use_mirror')) {
+        if (use_mirror == 'true') {
             // clear all proxy settings, this is available for global
             System.clearProperty "http.proxyHost"
             System.clearProperty "http.proxyPort"
