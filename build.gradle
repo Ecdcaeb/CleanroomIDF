@@ -30,7 +30,7 @@ buildscript {
     }
 }
 
-if (propertyBool('use_mirror')) apply from: "gradle/scripts/mirror.gradle"
+//if (propertyBool('use_mirror')) apply from: "gradle/scripts/mirror.gradle"
 
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
