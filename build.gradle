@@ -1,8 +1,19 @@
-boolean useMirror = use_mirror_url == "true"
+apply from: 'gradle/scripts/helpers.gradle'
+assertProperty 'mod_version'
+assertProperty 'root_package'
+assertProperty 'mod_id'
+assertProperty 'mod_name'
+
+assertSubProperties 'use_access_transformer', 'access_transformer_locations'
+assertSubProperties 'is_coremod', 'coremod_includes_mod', 'coremod_plugin_class_name'
+assertSubProperties 'use_asset_mover', 'asset_mover_version'
+
+setDefaultProperty 'mapping_channel', true, 'stable'
+setDefaultProperty 'mapping_version', true, '39'
 
 buildscript {
     repositories {
-        if (useMirror) {
+        if (propertyBool('use_mirror')) {
             // clear all proxy settings, this is available for global
             System.clearProperty "http.proxyHost"
             System.clearProperty "http.proxyPort"
@@ -27,25 +38,12 @@ buildscript {
     }
 }
 
-if (useMirror) apply from: "mirror.gradle"
-apply from: 'gradle/scripts/helpers.gradle'
+if (propertyBool('use_mirror')) apply from: "gradle/scripts/mirror.gradle"
 
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'java'
-
-assertProperty 'mod_version'
-assertProperty 'root_package'
-assertProperty 'mod_id'
-assertProperty 'mod_name'
-
-assertSubProperties 'use_access_transformer', 'access_transformer_locations'
-assertSubProperties 'is_coremod', 'coremod_includes_mod', 'coremod_plugin_class_name'
-assertSubProperties 'use_asset_mover', 'asset_mover_version'
-
-setDefaultProperty 'mapping_channel', true, 'stable'
-setDefaultProperty 'mapping_version', true, '39'
 
 version = "1.12.2-${mod_version}"
 group = root_package
