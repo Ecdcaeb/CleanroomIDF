@@ -95,6 +95,9 @@ repositories {
     maven {
         url "https://maven.outlands.top/releases/"
     }
+    maven {
+        url "https://repo.maven.apache.org/maven2/"
+    }
     exclusiveContent {
         forRepository {
             maven {
