@@ -18,7 +18,7 @@ buildscript {
         maven { url = 'https://repo.spongepowered.org/repository/maven-public' }
         mavenCentral()
         gradlePluginPortal()
-        if (use_mirror == 'true') {
+        if (project.use_mirror == 'true') {
             //use mirror maven later, but try orgin for fail trying
             maven { url "https://maven.aliyun.com/nexus/content/groups/public" }
             maven { url "https://${mirror_maven_url}" }
@@ -38,7 +38,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'java'
 apply plugin: 'org.spongepowered.mixin'
 
-version = "1.12.2-${propertyString('mod_version')}"
+version = "1.12.2-${project.mod_version)}"
 group = root_package
 archivesBaseName = mod_name
 
@@ -48,11 +48,11 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 minecraft {
 
-    mappings channel: mappings_channel, version: mappings_version
+    mappings channel: project.mappings_channel, version: project.mappings_version
 
 
     if(propertyBool('use_access_transformer')){
-        accessTransformer = file('src/main/resources/META-INF/${access_transformer_locations'}')
+        accessTransformer = file('src/main/resources/META-INF/${project.access_transformer_locations'}')
     }
 
     legacy {
@@ -80,11 +80,11 @@ minecraft {
         client {
             workingDirectory project.file('run/client')
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            //property 'forge.enabledGameTestNamespaces', propertyString('mod_id')
+            //property 'forge.enabledGameTestNamespaces', project.mod_id
 
 
             mods {
-                "${propertyString('mod_id')}" {
+                "${project.mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -92,12 +92,12 @@ minecraft {
 
         server {
             workingDirectory project.file('run/server')
-            //property 'forge.enabledGameTestNamespaces', propertyString('mod_id')
+            //property 'forge.enabledGameTestNamespaces', project.mod_id
             args '--nogui'
 
 
             mods {
-                "${propertyString('mod_id')}" {
+                "${project.mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -147,7 +147,7 @@ dependencies {
     // The "userdev" classifier will be requested and setup by ForgeGradle.
     // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
-    minecraft "com.cleanroommc:cleanroom:${propertyString('cleanroom_version')}"
+    minecraft "com.cleanroommc:cleanroom:${project.cleanroom_version}"
 
     // Example mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
@@ -177,7 +177,7 @@ dependencies {
     // //implementation "io.github.llamalad7:mixinextras-common:0.3.5"
 
     if (propertyBool('use_asset_mover')) {
-        implementation "com.cleanroommc:assetmover:${propertyString('asset_mover_version')}"
+        implementation "com.cleanroommc:assetmover:${project.asset_mover_version}"
     }
 
     if (propertyBool('enable_junit_testing')) {
@@ -238,10 +238,10 @@ jar {
             }
         }
         if((!propertyBool('is_coremod')) || propertyBool('coremod_includes_mod')){
-            attribute_map['Specification-Title'] = propertyString('mod_id')
+            attribute_map['Specification-Title'] = project.mod_id'
         }
         if(propertyBool('use_access_transformer')){
-            attribute_map['FMLAT']= propertyString('access_transformer_locations')
+            attribute_map['FMLAT']= project.access_transformer_locations
         }
 
         attributes(attribute_map)
@@ -286,5 +286,5 @@ sourceSets.each {
 }
 
 mixin {
-    add sourceSets.main, propertyString('mixin_refmap')
+    add sourceSets.main, project.mixin_refmap
 }
