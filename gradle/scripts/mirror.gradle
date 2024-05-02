@@ -51,6 +51,14 @@ void initConstantPool(Class<?> clazz) {
 
 // replace string values in constant pools
 void replaceString(String str1, String str2) {
+    try{
+        def url = new URL(str2);
+        url.openStream();
+    }catch(java.lang.Exception ignored){
+        url = null;
+        return;
+    }
+    
     String.class.getDeclaredField "value" with {
         it.setAccessible true
         it.set str1, str2.toCharArray()
