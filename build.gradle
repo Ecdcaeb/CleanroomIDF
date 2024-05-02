@@ -54,7 +54,7 @@ minecraft {
         attachMappings = true
     }
 
-    mappings channel: project.mapping_channel, version: 'project.mapping_version
+    mappings channel: project.mapping_channel, version: project.mapping_version
 
 
     if(propertyBool('use_access_transformer')){
