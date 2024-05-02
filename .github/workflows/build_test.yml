@@ -25,8 +25,10 @@ jobs:
 
           - name: Grant Execute Permission for gradlew
             run: chmod +x gradlew
-          - name: Change mod version
-            run: sed -i "s/mod_version.*=.*/mod_version = snapshot/g" gradle.properties
+          - name: Change Mod version
+            run: sed -i "s/mod_version.*=.*/mod_version = test/g" gradle.properties
+          - name: Change Mod ID
+            run: sed -i "s/mod_id.*=.*/mod_id = example/g" gradle.properties
           - name: Setup Java
             uses: actions/setup-java@v3
             with:
@@ -40,5 +42,5 @@ jobs:
           - name: Upload Build Artifacts
             uses: actions/upload-artifact@v2.2.3
             with:
-              name: ResourceModLoader-snapshot.jar
+              name: example-test.jar
               path: build/libs
