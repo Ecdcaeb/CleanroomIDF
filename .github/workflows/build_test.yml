@@ -16,12 +16,7 @@ jobs:
     steps:
           - name: Checkout Repository
             uses: actions/checkout@v3
-          - name: Gather Gradle properties
-            uses: madhead/read-java-properties@latest
-            id: gradle_properties
-            with:
-                 file: gradle.properties
-                 all: true
+        
 
           - name: Grant Execute Permission for gradlew
             run: chmod +x gradlew
