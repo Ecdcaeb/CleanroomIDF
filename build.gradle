@@ -52,7 +52,7 @@ minecraft {
 
 
     if(propertyBool('use_access_transformer')){
-        accessTransformer = file('src/main/resources/META-INF/${project.access_transformer_locations'}')
+        accessTransformer = file('src/main/resources/META-INF/${project.access_transformer_locations}')
     }
 
     legacy {
