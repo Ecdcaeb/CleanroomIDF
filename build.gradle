@@ -1,5 +1,20 @@
+boolean useMirror = use_mirror_url == "true"
+
 buildscript {
     repositories {
+        if (useMirror) {
+            // clear all proxy settings, this is available for global
+            System.clearProperty "http.proxyHost"
+            System.clearProperty "http.proxyPort"
+            System.clearProperty "https.proxyHost"
+            System.clearProperty "https.proxyPort"
+            System.clearProperty "socksProxyHost"
+            System.clearProperty "socksProxyPort"
+            System.setProperty "java.net.useSystemProxies", "false"
+
+            maven { url "https://maven.aliyun.com/nexus/content/groups/public" }
+            maven { url "https://${mirror_maven_url}" }
+        }
         maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://maven.outlands.top/releases' }
         maven { url = 'https://repo.spongepowered.org/repository/maven-public' }
@@ -11,6 +26,8 @@ buildscript {
         classpath "org.spongepowered:mixingradle:0.7.+"
     }
 }
+
+if (useMirror) apply from: "mirror.gradle"
 apply from: 'gradle/scripts/helpers.gradle'
 
 apply plugin: 'net.minecraftforge.gradle'
@@ -27,8 +44,6 @@ assertSubProperties 'use_access_transformer', 'access_transformer_locations'
 assertSubProperties 'is_coremod', 'coremod_includes_mod', 'coremod_plugin_class_name'
 assertSubProperties 'use_asset_mover', 'asset_mover_version'
 
-setDefaultProperty 'generate_sources_jar', true, false
-setDefaultProperty 'generate_javadocs_jar', true, false
 setDefaultProperty 'mapping_channel', true, 'stable'
 setDefaultProperty 'mapping_version', true, '39'
 
