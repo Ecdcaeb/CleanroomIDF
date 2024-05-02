@@ -35,7 +35,7 @@ jobs:
             with:
               arguments: build --info --stacktrace
           - name: Upload Build Artifacts
-            uses: actions/upload-artifact@v2.2.3
+            uses: actions/upload-artifact@v4
             with:
-              name: example-test.jar
+              name: example-1.12.2-test.jar
               path: build/libs
