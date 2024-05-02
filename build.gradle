@@ -36,6 +36,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'java'
+apply plugin: 'org.spongepowered.mixin'
 
 version = "1.12.2-${propertyString('mod_version')}"
 group = root_package
