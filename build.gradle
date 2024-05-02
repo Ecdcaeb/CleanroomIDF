@@ -15,11 +15,12 @@ buildscript {
             maven { url "https://${mirror_maven_url}" }
         } else {
             mavenCentral()
+            maven { url = 'https://maven.outlands.top/releases' }
             maven { url "https://maven.minecraftforge.net" }
         }
     }
     dependencies {
-        classpath "net.minecraftforge.gradle:ForgeGradle:${forge_gradle_version}"
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.10.+', changing: true
     }
 }
 
