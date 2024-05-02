@@ -14,6 +14,7 @@ setDefaultProperty 'mapping_version', true, '39'
 buildscript {
     repositories {
         if (use_mirror == 'true') {
+            //use mirror maven first, but try orgin for fail trying
             maven { url "https://maven.aliyun.com/nexus/content/groups/public" }
             maven { url "https://${mirror_maven_url}" }
         }
