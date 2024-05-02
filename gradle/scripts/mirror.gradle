@@ -23,12 +23,6 @@ repositories {
         maven { url "https://${mirror_maven_url}" }
     }
 }
-
-import net.minecraftforge.gradle.common.BasePlugin
-import net.minecraftforge.gradle.common.Constants
-import net.minecraftforge.gradle.tasks.DownloadAssetsTask
-import net.minecraftforge.gradle.user.patcherUser.forge.ForgePlugin
-import net.minecraftforge.gradle.util.json.version.Library
 import sun.misc.SharedSecrets
 import sun.misc.Unsafe
 
@@ -58,7 +52,7 @@ void replaceString(String str1, String str2) {
         url = null;
         return;
     }
-    
+
     String.class.getDeclaredField "value" with {
         it.setAccessible true
         it.set str1, str2.toCharArray()
@@ -78,21 +72,24 @@ String redirectUrl(String url) {
 }
 
 // ForgeGradle hardcoded some urls in these classes, we should modify them to mirror urls via some hacky ways
+https://github.com/MinecraftForge/ForgeGradle/blob/FG_6.0/src/common/java/net/minecraftforge/gradle/common/tasks/DownloadAssets.java
+
+//TODO : find a better replace method
 // https://github.com/MinecraftForge/ForgeGradle/blob/FG_2.3/src/main/java/net/minecraftforge/gradle/common/Constants.java#L123-L126
 // https://github.com/MinecraftForge/ForgeGradle/blob/FG_2.3/src/main/java/net/minecraftforge/gradle/tasks/DownloadAssetsTask.java#L189
 // https://github.com/MinecraftForge/ForgeGradle/blob/FG_2.3/src/main/java/net/minecraftforge/gradle/common/BasePlugin.java#L174-L176
 // https://github.com/MinecraftForge/ForgeGradle/blob/FG_2.3/src/main/java/net/minecraftforge/gradle/common/BasePlugin.java#L231
 // https://github.com/MinecraftForge/ForgeGradle/blob/FG_2.3/src/main/java/net/minecraftforge/gradle/util/json/version/Library.java#L72
-def classToInit = [Constants.class, DownloadAssetsTask.GetAssetTask.class, ForgePlugin.class, Library.class]
+def classToInit = [] //[net.minecraftforge.gradle.common.tasks.DownloadAssets.class]
 for (clazz in classToInit) {
     initConstantPool Unsafe.theUnsafe.allocateInstance(clazz).class
 }
 
-replaceString "https://launchermeta.mojang.com/mc/game/version_manifest.json", redirectUrl("https://${mirror_assets_url}/mc/game/version_manifest.json")
-replaceString "http://resources.download.minecraft.net/", "https://download.mcbbs.net/assets/" // use MCBBS mirror due to there"s no way to hook http 302 response when downloading assets
-replaceString "https://libraries.minecraft.net/", "https://${mirror_maven_url}"
-replaceString "https://maven.minecraftforge.net", "https://${mirror_maven_url}"
-replaceString "https://maven.minecraftforge.net/de/oceanlabs/mcp/versions.json", redirectUrl("https://${mirror_maven_url}/de/oceanlabs/mcp/versions.json")
+// replaceString "https://launchermeta.mojang.com/mc/game/version_manifest.json", redirectUrl("https://${mirror_assets_url}/mc/game/version_manifest.json")
+// replaceString "http://resources.download.minecraft.net/", "https://download.mcbbs.net/assets/" // use MCBBS mirror due to there"s no way to hook http 302 response when downloading assets
+// replaceString "https://libraries.minecraft.net/", "https://${mirror_maven_url}"
+// replaceString "https://maven.minecraftforge.net", "https://${mirror_maven_url}"
+// replaceString "https://maven.minecraftforge.net/de/oceanlabs/mcp/versions.json", redirectUrl("https://${mirror_maven_url}/de/oceanlabs/mcp/versions.json")
 
 tasks.whenTaskAdded {
     if (it.name == "getVersionJson") it.dependsOn mirrorManifest
