@@ -147,7 +147,7 @@ afterEvaluate {
     }
 
     def mcVersion = forge.delayedString('1.12.2').call()
-    def mcBasePath = "/de/oceanlabs/mcp/mcp/1.12.2/mcp-$1.12.2"
+    def mcBasePath = "/de/oceanlabs/mcp/mcp/1.12.2/mcp-1.12.2"
     def mcBaseUrl = "https://${mirror_maven_url}${mcBasePath}"
     new URL("${mcBaseUrl}-srg.zip").withInputStream { is ->
         Files.copy(is, file("${projectDir}/.gradle/local-repo${mcBasePath}-srg.zip").toPath().with { path ->
