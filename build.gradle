@@ -33,7 +33,7 @@ setDefaultProperty 'mapping_channel', true, 'stable'
 setDefaultProperty 'mapping_version', true, '39'
 
 version = "1.12.2-${mod_version}"
-group = mod_base_package
+group = root_package
 archivesBaseName = mod_name
 
 
@@ -75,12 +75,26 @@ minecraft {
             workingDirectory project.file('run/client')
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             //property 'forge.enabledGameTestNamespaces', mod_id
+
+
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
         }
 
         server {
             workingDirectory project.file('run/server')
             //property 'forge.enabledGameTestNamespaces', mod_id
             args '--nogui'
+
+
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
         }
     }
 }
@@ -115,6 +129,10 @@ repositories {
         }
     }
     mavenCentral()
+    mavenLocal()
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 dependencies {
