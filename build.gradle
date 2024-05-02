@@ -13,16 +13,16 @@ setDefaultProperty 'mapping_version', true, '39'
 
 buildscript {
     repositories {
-        if (use_mirror == 'true') {
-            //use mirror maven first, but try orgin for fail trying
-            maven { url "https://maven.aliyun.com/nexus/content/groups/public" }
-            maven { url "https://${mirror_maven_url}" }
-        }
         maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://maven.outlands.top/releases' }
         maven { url = 'https://repo.spongepowered.org/repository/maven-public' }
         mavenCentral()
         gradlePluginPortal()
+        if (use_mirror == 'true') {
+            //use mirror maven later, but try orgin for fail trying
+            maven { url "https://maven.aliyun.com/nexus/content/groups/public" }
+            maven { url "https://${mirror_maven_url}" }
+        }
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.10.+', changing: true
