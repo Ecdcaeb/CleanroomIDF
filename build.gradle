@@ -48,17 +48,17 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 minecraft {
 
-    mappings channel: '${project.mapping_channel}', version: '${project.mapping_version}'
-
-
-    if(propertyBool('use_access_transformer')){
-        accessTransformer = file('src/main/resources/META-INF/${project.access_transformer_locations}')
-    }
-
     legacy {
         fixClasspath = true
         extractMappings = true
         attachMappings = true
+    }
+
+    mappings channel: '${project.mapping_channel}', mappings version: '${project.mapping_version}'
+
+
+    if(propertyBool('use_access_transformer')){
+        accessTransformer = file('src/main/resources/META-INF/${project.access_transformer_locations}')
     }
     
     runs {
