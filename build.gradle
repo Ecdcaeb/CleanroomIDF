@@ -68,20 +68,20 @@ sourceSets {
         resources {
             srcDir 'src/generated/resources'
         }
-        blossom {
-            resources {
-                property("mod_id", mod_id)
-                property("mod_name", mod_name)
-                property("mod_description", mod_description)
-                property("mod_version", mod_version)
-                property("mod_authors", mod_authors)
-            }
-            javaSources {
-                property("MODNAME", mod_name)
-                property("MODID", mod_id)
-                property("VERSION", version)
-            }
-        }
+        // blossom {
+        //     resources {
+        //         property("mod_id", mod_id)
+        //         property("mod_name", mod_name)
+        //         property("mod_description", mod_description)
+        //         property("mod_version", mod_version)
+        //         property("mod_authors", mod_authors)
+        //     }
+        //     javaSources {
+        //         property("MODNAME", mod_name)
+        //         property("MODID", mod_id)
+        //         property("VERSION", version)
+        //     }
+        // }
     }
 }
 repositories {
