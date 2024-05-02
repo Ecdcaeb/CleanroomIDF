@@ -14,15 +14,6 @@ setDefaultProperty 'mapping_version', true, '39'
 buildscript {
     repositories {
         if (use_mirror == 'true') {
-            // clear all proxy settings, this is available for global
-            System.clearProperty "http.proxyHost"
-            System.clearProperty "http.proxyPort"
-            System.clearProperty "https.proxyHost"
-            System.clearProperty "https.proxyPort"
-            System.clearProperty "socksProxyHost"
-            System.clearProperty "socksProxyPort"
-            System.setProperty "java.net.useSystemProxies", "false"
-
             maven { url "https://maven.aliyun.com/nexus/content/groups/public" }
             maven { url "https://${mirror_maven_url}" }
         }
