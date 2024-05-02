@@ -48,7 +48,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 minecraft {
 
-    mappings channel: project.mappings_channel, version: project.mappings_version
+    mappings channel: '${project.mapping_channel}', version: '${project.mapping_version}'
 
 
     if(propertyBool('use_access_transformer')){
