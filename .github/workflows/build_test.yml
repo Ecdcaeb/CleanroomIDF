@@ -6,10 +6,7 @@ name: Build Test Artifact
 
 on:
   push:
-    branches:
-        - 'main'
-    paths:
-        - 'src/**'
+  pull-request:
 
 jobs:
   build:
