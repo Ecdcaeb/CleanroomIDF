@@ -154,7 +154,7 @@ String interpolateCustom(Properties properties, String value) {
 }
 
 void assertPropertyCustom(Properties properties, String propertyName) {
-    def property = propertyCustom(properties, propertyName)
+    def property = propertyCustom.call(properties, propertyName)
     if (property == null) {
         throw new GradleException("Property ${propertyName} is not defined!")
     }
