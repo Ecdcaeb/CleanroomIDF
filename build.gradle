@@ -200,7 +200,7 @@ tasks.named('processResources', ProcessResources).configure {
     var replaceProperties = [
             mod_id: propertyString('mod_id'),
             mod_name: propertyString('mod_name'),
-            mod_version: modmetadata.mod_version,
+            mod_version: propertyString('mod_version'),
             mod_description: propertyString('mod_description'),
             mod_authors: "[${propertyStringList('mod_authors', ',').join(', ')}]",
             mod_credits: propertyString('mod_credits'),
