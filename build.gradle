@@ -237,7 +237,7 @@ jar {
             }
         }
         if((!propertyBool('is_coremod')) || propertyBool('coremod_includes_mod')){
-            attribute_map['Specification-Title'] = project.mod_id
+            attribute_map['Specification-Title'] = project.modmetadata.mod_id
         }
         if(propertyBool('use_access_transformer')){
             attribute_map['FMLAT']= project.access_transformer_locations
