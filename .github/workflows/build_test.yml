@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: Build and Upload Artifact
+    name: Build and Test For example
     runs-on: ubuntu-latest
 
     steps:
@@ -29,9 +29,7 @@ jobs:
           - name: Grant Execute Permission for gradlew
             run: chmod +x gradlew
           - name: Change Mod version
-            run: sed -i "s/mod_version.*=.*/mod_version = test/g" gradle.properties
-          - name: Change Mod ID
-            run: sed -i "s/mod_id.*=.*/mod_id = example/g" gradle.properties
+            run: sed -i "s/mod_version.*=.*/mod_version = test/g" modmetadata.properties
           - name: Setup Java
             uses: actions/setup-java@v3
             with:
@@ -45,5 +43,5 @@ jobs:
           - name: Upload Build Artifacts
             uses: actions/upload-artifact@v4
             with:
-              name: example-1.12.2-test.jar
+              name: example-1.12.2
               path: build/libs
