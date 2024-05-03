@@ -9,6 +9,7 @@ ext.assertProperty = this.&assertProperty as MethodClosure
 ext.assertSubProperties = this.&assertSubProperties as MethodClosure
 ext.setDefaultProperty = this.&setDefaultProperty as MethodClosure
 ext.assertEnvironmentVariable = this.&assertEnvironmentVariable as MethodClosure
+
 ext.propertyStringCustom = this.&propertyStringCustom as MethodClosure
 ext.propertyBoolCustom = this.&propertyBoolCustom as MethodClosure
 ext.propertyStringListCustom = this.&propertyStringListCustom as MethodClosure

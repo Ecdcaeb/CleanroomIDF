@@ -1,12 +1,12 @@
 Properties modmetadata = new Properties()
 modmetadata.load(new FileInputStream("modmetadata.properties"))
 def propertiesMap = [
-    "modmetadata":modmetadata
+    "modmetadata" : modmetadata
 ]
 apply from: 'gradle/scripts/helpers.gradle'
 
-assertPropertyCustom "modmetadata", 'mod_version'
-assertPropertyCustom "modmetadata", 'root_package'
+ext.assertPropertyCustom "modmetadata", 'mod_version'
+ext.assertPropertyCustom "modmetadata", 'root_package'
 assertPropertyCustom "modmetadata", 'mod_id'
 assertPropertyCustom "modmetadata", 'mod_name'
 
