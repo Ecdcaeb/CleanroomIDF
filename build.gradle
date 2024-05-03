@@ -25,14 +25,12 @@ buildscript {
         }
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.10.+', changing: true
+        classpath group: 'net.neoforged.gradle.userdev', name: 'NeoGradle', version: '7.0.109', changing: false
         classpath "org.spongepowered:mixingradle:0.7.+"
     }
 }
 
-//if (propertyBool('use_mirror')) apply from: "gradle/scripts/mirror.gradle"
-
-apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'net.neoforged.gradle.userdev'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'java'
@@ -147,7 +145,7 @@ dependencies {
     // The "userdev" classifier will be requested and setup by ForgeGradle.
     // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
-    minecraft "com.cleanroommc:cleanroom:${project.cleanroom_version}"
+    implementation "com.cleanroommc:cleanroom:${project.cleanroom_version}"
 
     // Example mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
@@ -190,30 +188,12 @@ dependencies {
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.
 // When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
 // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
-tasks.named('processResources', ProcessResources).configure {
+processResources {
     def filterList = ['mcmod.info', 'pack.mcmeta']
     filterList.addAll(propertyStringList('mixin_configs').collect(config -> "mixins.${config}.json" as String))
-
-    var replaceProperties = [
-            mod_id: propertyString('mod_id'),
-            mod_name: propertyString('mod_name'),
-            mod_version: propertyString('mod_version'),
-            mod_description: propertyString('mod_description'),
-            mod_authors: "[${propertyStringList('mod_authors', ',').join(', ')}]",
-            mod_credits: propertyString('mod_credits'),
-            mod_url: propertyString('mod_url'),
-            mod_update_json: propertyString('mod_update_json'),
-            mod_logo_path: propertyString('mod_logo_path'),
-            mixin_refmap: propertyString('mixin_refmap'),
-            mixin_package: propertyString('mixin_package')
-
-    ]
-    inputs.properties replaceProperties
-
     filesMatching(filterList) {
-        expand replaceProperties + [project: project]
+        expand project.properties
     }
-
     if (propertyBool('use_access_transformer')) {
         rename '(.+_at.cfg)', 'META-INF/$1'
     }
@@ -273,6 +253,13 @@ eclipse {
     //autoBuildTasks genEclipseRuns
     // Run when importing the project
     synchronizationTasks 'genEclipseRuns'
+}
+// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
 }
 
 // Merge the resources and classes into the same directory. 
