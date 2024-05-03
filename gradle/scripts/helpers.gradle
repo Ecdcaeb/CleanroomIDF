@@ -21,7 +21,9 @@ ext.assertEnvironmentVariableCustom = this.&assertEnvironmentVariableCustom as M
 ext.newProperties = this.&newProperties as MethodClosure
 ext.getProperties = this.&getProperties as MethodClosure
 
-def propertiesMap = []
+def propertiesMap = [
+    "root":project.properties
+]
 void newProperties(String name, String file){
     Properties v = new Properties()
     v.load(new FileInputStream(file))
