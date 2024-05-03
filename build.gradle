@@ -2,7 +2,17 @@ Properties modmetadate = new Properties()
 modmetadate.load(new FileInputStream("modmetadata.properties"))
 
 apply from: 'gradle/scripts/helpers.gradle'
+assertProperty modmetadate, 'mod_version'
+assertProperty modmetadate, 'root_package'
+assertProperty modmetadate, 'mod_id'
+assertProperty modmetadate, 'mod_name'
 
+assertSubProperties 'use_access_transformer', 'access_transformer_locations'
+assertSubProperties 'is_coremod', 'coremod_includes_mod', 'coremod_plugin_class_name'
+assertSubProperties 'use_asset_mover', 'asset_mover_version'
+
+setDefaultProperty 'mapping_channel', true, 'stable'
+setDefaultProperty 'mapping_version', true, '39-1.12'
 
 buildscript {
     repositories {
@@ -35,7 +45,7 @@ archivesBaseName = mod_name
 
 
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(propertyInteger('java_version'))
 
 minecraft {
 
@@ -75,7 +85,7 @@ minecraft {
 
 
             mods {
-                "${project.mod_id}" {
+                "${project.modmetadate.mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -88,7 +98,7 @@ minecraft {
 
 
             mods {
-                "${project.mod_id}" {
+                "${project.modmetadate.mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -186,17 +196,17 @@ tasks.named('processResources', ProcessResources).configure {
     filterList.addAll(propertyStringList('mixin_configs').collect(config -> "mixins.${config}.json" as String))
 
     var replaceProperties = [
-            mod_id: project.modmetadata.mod_id,
-            mod_name: project.modmetadata.mod_name,
-            mod_version: project.modmetadata.mod_version,
-            mod_description: project.modmetadata.mod_description,
-            mod_authors: "[${propertyStringList('mod_authors', ',').join(', ')}]",
-            mod_credits: project.modmetadata.mod_credits,
-            mod_url: project.modmetadata.mod_url,
-            mod_update_json: project.modmetadata.mod_update_json,
-            mod_logo_path: project.modmetadata.mod_logo_path,
-            mixin_refmap: project.mixin_refmap,
-            mixin_package: project.mixin_package
+            mod_id: propertyString(modmetadate, 'mod_id'),
+            mod_name: propertyString(modmetadate, 'mod_name'),
+            mod_version: propertyString(modmetadate, 'mod_version'),
+            mod_description: propertyString(modmetadate, 'mod_description'),
+            mod_authors: "[${propertyStringList(modmetadate, 'mod_authors', ',').join(', ')}]",
+            mod_credits: propertyString(modmetadate, 'mod_credits'),
+            mod_url: propertyString(modmetadate, 'mod_url'),
+            mod_update_json: propertyString(modmetadate, 'mod_update_json'),
+            mod_logo_path: propertyString(modmetadate, 'mod_logo_path'),
+            mixin_refmap: propertyString('mixin_refmap'),
+            mixin_package: propertyString('mixin_package')
 
     ]
     inputs.properties replaceProperties
@@ -215,11 +225,11 @@ jar {
     manifest {
         def attribute_map = [:]
         attribute_map['Specification-Version'] = '1' // We are version 1 of ourselves
-        attribute_map['Specification-Vendor'] = "[${propertyStringList('mod_authors', ',').join(', ')}]"
+        attribute_map['Specification-Vendor'] = "[${propertyStringList(modmetadate, 'mod_authors', ',').join(', ')}]"
         attribute_map['ModType'] = 'CRL'
         attribute_map['Implementation-Title'] = project.name
-        attribute_map['Implementation-Version'] = propertyString('mod_version')
-        attribute_map['Implementation-Vendor'] = "[${propertyStringList('mod_authors', ',').join(', ')}]"
+        attribute_map['Implementation-Version'] = propertyString(modmetadate, 'mod_version')
+        attribute_map['Implementation-Vendor'] = "[${propertyStringList(modmetadate, 'mod_authors', ',').join(', ')}]"
         attribute_map['Implementation-Timestamp'] = new Date().format('yyyy-MM-dd\'T\'HH:mm:ssZ')
         if(propertyBool('is_coremod')){
             attribute_map['FMLCorePlugin'] = propertyString('coremod_plugin_class_name')
