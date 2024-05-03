@@ -39,7 +39,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'java'
 apply plugin: 'org.spongepowered.mixin'
 
-version = "1.12.2-${project."modmetadata".mod_version}"
+version = "1.12.2-${project.modmetadata.mod_version}"
 group = root_package
 archivesBaseName = mod_name
 
@@ -85,7 +85,7 @@ minecraft {
 
 
             mods {
-                "${project."modmetadata".mod_id}" {
+                "${project.modmetadata.mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -98,7 +98,7 @@ minecraft {
 
 
             mods {
-                "${project."modmetadata".mod_id}" {
+                "${project.modmetadata.mod_id}" {
                     source sourceSets.main
                 }
             }
