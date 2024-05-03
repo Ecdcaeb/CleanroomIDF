@@ -38,12 +38,12 @@ apply plugin: 'java'
 apply plugin: 'org.spongepowered.mixin'
 
 version = "1.12.2-${modmetadata.mod_version}"
-group = modmetadata.root_package
-archivesBaseName = modmetadata.mod_name
+group = project.root_package
+archivesBaseName = project.mod_name
 
 
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(propertyInteger('java_version'))
 
 minecraft {
 
@@ -83,7 +83,7 @@ minecraft {
 
 
             mods {
-                "${modmetadata.mod_id}" {
+                "${project.mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -96,7 +96,7 @@ minecraft {
 
 
             mods {
-                "${modmetadata.mod_id}" {
+                "${project.mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -194,15 +194,15 @@ tasks.named('processResources', ProcessResources).configure {
     filterList.addAll(propertyStringList('mixin_configs').collect(config -> "mixins.${config}.json" as String))
 
     var replaceProperties = [
-            mod_id: modmetadata.mod_id,
-            mod_name: modmetadata.mod_name,
+            mod_id: project.mod_id,
+            mod_name: project.mod_name,
             mod_version: modmetadata.mod_version,
-            mod_description: modmetadata.mod_description,
-            mod_authors: "[${modmetadata.mod_authors.split(',').findAll { !it.isEmpty() }.join(', ')}]",
-            mod_credits: modmetadata.mod_credits,
-            mod_url: modmetadata.mod_url,
-            mod_update_json: modmetadata.mod_update_json,
-            mod_logo_path: modmetadata.mod_logo_path,
+            mod_description: project.mod_description,
+            mod_authors: "[${project.mod_authors.split(',').findAll { !it.isEmpty() }.join(', ')}]",
+            mod_credits: project.mod_credits,
+            mod_url: project.mod_url,
+            mod_update_json: project.mod_update_json,
+            mod_logo_path: project.mod_logo_path,
             mixin_refmap: propertyString('mixin_refmap'),
             mixin_package: propertyString('mixin_package')
 
@@ -223,11 +223,11 @@ jar {
     manifest {
         def attribute_map = [:]
          attribute_map['Specification-Version'] = '1' // We are version 1 of ourselves
-        attribute_map['Specification-Vendor'] = "[${modmetadata.mod_authors.split(',').findAll { !it.isEmpty() }.join(', ')}]"
+        attribute_map['Specification-Vendor'] = "[${project.mod_authors.split(',').findAll { !it.isEmpty() }.join(', ')}]"
         attribute_map['ModType'] = 'CRL'
         attribute_map['Implementation-Title'] = project.name
-        attribute_map['Implementation-Version'] = modmetadata.mod_version
-        attribute_map['Implementation-Vendor'] = "[${modmetadata.mod_authors.split(',').findAll { !it.isEmpty() }.join(', ')}]"
+        attribute_map['Implementation-Version'] = project.mod_version
+        attribute_map['Implementation-Vendor'] = "[${project.mod_authors.split(',').findAll { !it.isEmpty() }.join(', ')}]"
         attribute_map['Implementation-Timestamp'] = new Date().format('yyyy-MM-dd\'T\'HH:mm:ssZ')
         if(propertyBool('is_coremod')){
             attribute_map['FMLCorePlugin'] = propertyString('coremod_plugin_class_name')
@@ -237,7 +237,7 @@ jar {
             }
         }
         if((!propertyBool('is_coremod')) || propertyBool('coremod_includes_mod')){
-            attribute_map['Specification-Title'] = modmetadata.mod_id
+            attribute_map['Specification-Title'] = project.mod_id
         }
         if(propertyBool('use_access_transformer')){
             attribute_map['FMLAT']= project.access_transformer_locations
