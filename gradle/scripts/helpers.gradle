@@ -21,16 +21,13 @@ ext.assertEnvironmentVariableCustom = this.&assertEnvironmentVariableCustom as M
 ext.newProperties = this.&newProperties as MethodClosure
 ext.getProperties = this.&getProperties as MethodClosure
 
-def propertiesMap = [
-    "root":project.properties
-]
 void newProperties(String name, String file){
     Properties v = new Properties()
     v.load(new FileInputStream(file))
-    propertiesMap.put(name, v)
+    project.propertiesMap.put(name, v)
 }
 Properties getProperties(String name){
-    return propertiesMap.get(name)
+    return project.propertiesMap.get(name)
 }
 String propertyString(String key) {
     return $property(key).toString()
@@ -144,7 +141,7 @@ Collection<String> propertyStringListCustom(String properties, String key, Strin
 }
 
 private Object $propertyCustom(String properties, String key) {
-    def value = propertiesMap.get(properties).getProperty(key)
+    def value = project.propertiesMap.get(properties).getProperty(key)
     if (value instanceof String) {
         return interpolate(value)
     }
@@ -159,7 +156,7 @@ String interpolateCustom(String properties, String value) {
         return new GroovyShell(this.getClass().getClassLoader(), newBinding).evaluate(value)
     }
     if (value.contains('${')) {
-        return new SimpleTemplateEngine().createTemplate(value).make(propertiesMap.get(properties)).toString()
+        return new SimpleTemplateEngine().createTemplate(value).make(project.propertiesMap.get(properties)).toString()
     }
     return value
 }

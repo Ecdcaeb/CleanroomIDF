@@ -1,3 +1,7 @@
+def propertiesMap = [
+    "root":project.properties
+]
+
 apply from: 'gradle/scripts/helpers.gradle'
 newProperties("modmetadata", "modmetadata.properties")
 Properties modmetadata = getProperties("modmetadata")
