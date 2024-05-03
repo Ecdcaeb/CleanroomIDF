@@ -46,5 +46,5 @@ jobs:
           - name: Upload Build Artifacts
             uses: actions/upload-artifact@v4
             with:
-              name: example-1.12.2-${{ steps.date.outputs.date }}-${{ env.GITHUB_RUN_ATTEMPT }}
+              name: example-1.12.2-${{ steps.date.outputs.date }}- $GITHUB_RUN_NUMBER
               path: build/libs
