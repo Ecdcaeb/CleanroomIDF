@@ -4,7 +4,7 @@
 	"refmap": "${mixin_refmap}",
 	"target": "@env(DEFAULT)",
 	"minVersion": "0.8.5",
-	"compatibilityLevel": "JAVA_8",
+	"compatibilityLevel": "JAVA_${java_version}",
 	"mixins": [],
 	"server": [],
 	"client": []
