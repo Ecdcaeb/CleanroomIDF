@@ -1,8 +1,11 @@
-ext.modmetadata = new Properties()
+Properties modmetadata = new Properties()
 modmetadata.load(new FileInputStream("modmetadata.properties"))
 
 apply from: 'gradle/scripts/helpers.gradle'
 
+assertProperty 'root_package'
+assertProperty 'mod_id'
+assertProperty 'mod_name'
 
 assertSubProperties 'use_access_transformer', 'access_transformer_locations'
 assertSubProperties 'is_coremod', 'coremod_includes_mod', 'coremod_plugin_class_name'
@@ -30,15 +33,17 @@ buildscript {
     }
 }
 
+//if (propertyBool('use_mirror')) apply from: "gradle/scripts/mirror.gradle"
+
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'java'
 apply plugin: 'org.spongepowered.mixin'
 
-version = "1.12.2-${propertyString('mod_version')}"
-group = propertyString('root_package')
-archivesBaseName = propertyString('mod_name')
+version = "1.12.2-${modmetadata.mod_version}"
+group = project.root_package
+archivesBaseName = project.mod_name
 
 
 
@@ -52,11 +57,11 @@ minecraft {
         attachMappings = true
     }
 
-    mappings channel: propertyString('mapping_channel'), version: propertyString('mapping_version')
+    mappings channel: project.mapping_channel, version: project.mapping_version
 
 
     if(propertyBool('use_access_transformer')){
-        accessTransformer = file('src/main/resources/META-INF/${propertyString('access_transformer_locations')}')
+        accessTransformer = file('src/main/resources/META-INF/${project.access_transformer_locations}')
     }
     
     runs {
@@ -78,11 +83,11 @@ minecraft {
         client {
             workingDirectory project.file('run/client')
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            //property 'forge.enabledGameTestNamespaces', propertyString('mod_id')
+            //property 'forge.enabledGameTestNamespaces', modmetadata.mod_id
 
 
             mods {
-                "${propertyString('mod_id')}" {
+                "${project.mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -90,12 +95,12 @@ minecraft {
 
         server {
             workingDirectory project.file('run/server')
-            //property 'forge.enabledGameTestNamespaces', propertyString('mod_id')
+            //property 'forge.enabledGameTestNamespaces', modmetadata.mod_id
             args '--nogui'
 
 
             mods {
-                "${propertyString('mod_id')}" {
+                "${project.mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -225,7 +230,7 @@ jar {
         attribute_map['Specification-Vendor'] = "[${propertyStringList('mod_authors', ',').join(', ')}]"
         attribute_map['ModType'] = 'CRL'
         attribute_map['Implementation-Title'] = project.name
-        attribute_map['Implementation-Version'] = propertyString('mod_version')
+        attribute_map['Implementation-Version'] = modmetadata.mod_version
         attribute_map['Implementation-Vendor'] = "[${propertyStringList('mod_authors', ',').join(', ')}]"
         attribute_map['Implementation-Timestamp'] = new Date().format('yyyy-MM-dd\'T\'HH:mm:ssZ')
         if(propertyBool('is_coremod')){
@@ -236,10 +241,10 @@ jar {
             }
         }
         if((!propertyBool('is_coremod')) || propertyBool('coremod_includes_mod')){
-            attribute_map['Specification-Title'] = propertyString('mod_id')
+            attribute_map['Specification-Title'] = project.mod_id
         }
         if(propertyBool('use_access_transformer')){
-            attribute_map['FMLAT']= propertyString('access_transformer_locations')
+            attribute_map['FMLAT']= project.access_transformer_locations
         }
 
         attributes(attribute_map)
@@ -284,5 +289,5 @@ sourceSets.each {
 }
 
 mixin {
-    add sourceSets.main, propertyString('mixin_refmap')
+    add sourceSets.main, project.mixin_refmap
 }
