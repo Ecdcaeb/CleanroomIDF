@@ -79,11 +79,11 @@ minecraft {
         client {
             workingDirectory project.file('run/client')
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            //property 'forge.enabledGameTestNamespaces', project.mod_id
+            //property 'forge.enabledGameTestNamespaces', project.modmetadata.mod_id
 
 
             mods {
-                "${project.mod_id}" {
+                "${project.modmetadata.mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -91,12 +91,12 @@ minecraft {
 
         server {
             workingDirectory project.file('run/server')
-            //property 'forge.enabledGameTestNamespaces', project.mod_id
+            //property 'forge.enabledGameTestNamespaces', project.modmetadata.mod_id
             args '--nogui'
 
 
             mods {
-                "${project.mod_id}" {
+                "${project.modmetadata.mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -194,15 +194,15 @@ tasks.named('processResources', ProcessResources).configure {
     filterList.addAll(propertyStringList('mixin_configs').collect(config -> "mixins.${config}.json" as String))
 
     var replaceProperties = [
-            mod_id: propertyString('mod_id'),
-            mod_name: propertyString('mod_name'),
-            mod_version: propertyString('mod_version'),
-            mod_description: propertyString('mod_description'),
-            mod_authors: "[${propertyStringList('mod_authors', ',').join(', ')}]",
-            mod_credits: propertyString('mod_credits'),
-            mod_url: propertyString('mod_url'),
-            mod_update_json: propertyString('mod_update_json'),
-            mod_logo_path: propertyString('mod_logo_path'),
+            mod_id: project.modmetadata.mod_id,
+            mod_name: project.modmetadata.mod_name,
+            mod_version: project.modmetadata.mod_version,
+            mod_description: project.modmetadata.mod_description,
+            mod_authors: "[${project.modmetadata.mod_authors.split(',').findAll { !it.isEmpty() }.join(', ')}]",
+            mod_credits: project.modmetadata.mod_credits,
+            mod_url: project.modmetadata.mod_url,
+            mod_update_json: project.modmetadata.mod_update_json,
+            mod_logo_path: project.modmetadata.mod_logo_path,
             mixin_refmap: propertyString('mixin_refmap'),
             mixin_package: propertyString('mixin_package')
 
@@ -222,12 +222,12 @@ tasks.named('processResources', ProcessResources).configure {
 jar {
     manifest {
         def attribute_map = [:]
-        attribute_map['Specification-Version'] = '1' // We are version 1 of ourselves
-        attribute_map['Specification-Vendor'] = "[${propertyStringList('mod_authors', ',').join(', ')}]"
+         attribute_map['Specification-Version'] = '1' // We are version 1 of ourselves
+        attribute_map['Specification-Vendor'] = "[${project.modmetadata.mod_authors.split(',').findAll { !it.isEmpty() }.join(', ')}]"
         attribute_map['ModType'] = 'CRL'
         attribute_map['Implementation-Title'] = project.name
-        attribute_map['Implementation-Version'] = propertyString('mod_version')
-        attribute_map['Implementation-Vendor'] = "[${propertyStringList('mod_authors', ',').join(', ')}]"
+        attribute_map['Implementation-Version'] = project.modmetadata.mod_version
+        attribute_map['Implementation-Vendor'] = "[${project.modmetadata.mod_authors.split(',').findAll { !it.isEmpty() }.join(', ')}]"
         attribute_map['Implementation-Timestamp'] = new Date().format('yyyy-MM-dd\'T\'HH:mm:ssZ')
         if(propertyBool('is_coremod')){
             attribute_map['FMLCorePlugin'] = propertyString('coremod_plugin_class_name')
