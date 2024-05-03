@@ -24,7 +24,7 @@ buildscript {
         if (project.use_mirror_url == "true") {
             //use mirror maven later, but try orgin for fail trying
             maven { url "https://maven.aliyun.com/nexus/content/groups/public" }
-            maven { url "https://${mirror_maven_url}" }
+            maven { url "https://${project.mirror_maven_url}" }
         }
     }
     dependencies {
