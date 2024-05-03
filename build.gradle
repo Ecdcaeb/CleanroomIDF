@@ -193,27 +193,9 @@ dependencies {
 tasks.named('processResources', ProcessResources).configure {
     def filterList = ['mcmod.info', 'pack.mcmeta']
     filterList.addAll(propertyStringList('mixin_configs').collect(config -> "mixins.${config}.json" as String))
-
-    var replaceProperties = [
-            mod_id: propertyString('mod_id'),
-            mod_name: propertyString('mod_name'),
-            mod_version: propertyString('mod_version'),
-            mod_description: propertyString('mod_description'),
-            mod_authors: "[${propertyStringList('mod_authors', ',').join(', ')}]",
-            mod_credits: propertyString('mod_credits'),
-            mod_url: propertyString('mod_url'),
-            mod_update_json: propertyString('mod_update_json'),
-            mod_logo_path: propertyString('mod_logo_path'),
-            mixin_refmap: propertyString('mixin_refmap'),
-            mixin_package: propertyString('mixin_package')
-
-    ]
-    inputs.properties replaceProperties
-
     filesMatching(filterList) {
-        expand replaceProperties + [project: project]
+        expand project.properties
     }
-
     if (propertyBool('use_access_transformer')) {
         rename '(.+_at.cfg)', 'META-INF/$1'
     }
