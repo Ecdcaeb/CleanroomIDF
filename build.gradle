@@ -38,8 +38,8 @@ apply plugin: 'java'
 apply plugin: 'org.spongepowered.mixin'
 
 version = "1.12.2-${modmetadata.mod_version}"
-group = root_package
-archivesBaseName = mod_name
+group = modmetadata.root_package
+archivesBaseName = modmetadata.mod_name
 
 
 
