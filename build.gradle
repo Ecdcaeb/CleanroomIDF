@@ -1,15 +1,8 @@
+Properties modmetadate = new Properties()
+modmetadate.load(new FileInputStream("modmetadata.properties"))
+
 apply from: 'gradle/scripts/helpers.gradle'
-assertProperty 'mod_version'
-assertProperty 'root_package'
-assertProperty 'mod_id'
-assertProperty 'mod_name'
 
-assertSubProperties 'use_access_transformer', 'access_transformer_locations'
-assertSubProperties 'is_coremod', 'coremod_includes_mod', 'coremod_plugin_class_name'
-assertSubProperties 'use_asset_mover', 'asset_mover_version'
-
-setDefaultProperty 'mapping_channel', true, 'stable'
-setDefaultProperty 'mapping_version', true, '39'
 
 buildscript {
     repositories {
@@ -30,15 +23,13 @@ buildscript {
     }
 }
 
-//if (propertyBool('use_mirror')) apply from: "gradle/scripts/mirror.gradle"
-
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'java'
 apply plugin: 'org.spongepowered.mixin'
 
-version = "1.12.2-${project.mod_version}"
+version = "1.12.2-${project.modmetadate.mod_version}"
 group = root_package
 archivesBaseName = mod_name
 
@@ -193,9 +184,27 @@ dependencies {
 tasks.named('processResources', ProcessResources).configure {
     def filterList = ['mcmod.info', 'pack.mcmeta']
     filterList.addAll(propertyStringList('mixin_configs').collect(config -> "mixins.${config}.json" as String))
+
+    var replaceProperties = [
+            mod_id: project.modmetadata.mod_id,
+            mod_name: project.modmetadata.mod_name,
+            mod_version: project.modmetadata.mod_version,
+            mod_description: project.modmetadata.mod_description,
+            mod_authors: "[${propertyStringList('mod_authors', ',').join(', ')}]",
+            mod_credits: project.modmetadata.mod_credits,
+            mod_url: project.modmetadata.mod_url,
+            mod_update_json: project.modmetadata.mod_update_json,
+            mod_logo_path: project.modmetadata.mod_logo_path,
+            mixin_refmap: project.mixin_refmap,
+            mixin_package: project.mixin_package
+
+    ]
+    inputs.properties replaceProperties
+
     filesMatching(filterList) {
-        expand project.properties
+        expand replaceProperties + [project: project]
     }
+
     if (propertyBool('use_access_transformer')) {
         rename '(.+_at.cfg)', 'META-INF/$1'
     }

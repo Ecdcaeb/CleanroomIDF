@@ -18,6 +18,10 @@ boolean propertyBool(String key) {
     return propertyString(key).toBoolean()
 }
 
+int propertyInteger(String key){
+    return propertyString(key).toInteger()
+}
+
 Collection<String> propertyStringList(String key) {
     return propertyStringList(key, ' ')
 }
@@ -93,4 +97,8 @@ void assertEnvironmentVariable(String propertyName) {
     if (property.isEmpty()) {
         throw new GradleException("Property $propertyName is empty!")
     }
+}
+
+Collection<String> propertyStringList(Properties properties, String key, String delimit) {
+    return properties.getProperty(key).toString().split(delimit).findAll { !it.isEmpty() }
 }
