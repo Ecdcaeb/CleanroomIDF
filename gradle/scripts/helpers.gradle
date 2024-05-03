@@ -3,6 +3,7 @@ import org.codehaus.groovy.runtime.MethodClosure
 
 ext.propertyString = this.&propertyString as MethodClosure
 ext.propertyBool = this.&propertyBool as MethodClosure
+ext.propertyInteger = this.&propertyInteger as MethodClosure
 ext.propertyStringList = this.&propertyStringList as MethodClosure
 ext.interpolate = this.&interpolate as MethodClosure
 ext.assertProperty = this.&assertProperty as MethodClosure
