@@ -2,10 +2,10 @@ Properties modmetadata = new Properties()
 modmetadata.load(new FileInputStream("modmetadata.properties"))
 apply from: 'gradle/scripts/helpers.gradle'
 
-assertPropertyCustom(modmetadata, "mod_version")
-assertPropertyCustom("modmetadata", "root_package")
-assertPropertyCustom("modmetadata", "mod_id")
-assertPropertyCustom("modmetadata", "mod_name")
+assertPropertyCustom.call(modmetadata, "mod_version")
+assertPropertyCustom(modmetadata, "root_package")
+assertPropertyCustom(modmetadata, "mod_id")
+assertPropertyCustom(modmetadata, "mod_name")
 
 assertSubProperties 'use_access_transformer', 'access_transformer_locations'
 assertSubProperties 'is_coremod', 'coremod_includes_mod', 'coremod_plugin_class_name'
@@ -196,8 +196,8 @@ tasks.named('processResources', ProcessResources).configure {
     filterList.addAll(propertyStringList('mixin_configs').collect(config -> "mixins.${config}.json" as String))
 
     var replaceProperties = [
-            mod_id: propertyStringCustom("modmetadata", 'mod_id'),
-            mod_name: propertyStringCustom("modmetadata", 'mod_name'),
+            mod_id: propertyStringCustom(modmetadata, 'mod_id'),
+            mod_name: propertyStringCustom(modmetadata, 'mod_name'),
             mod_version: propertyStringCustom("modmetadata", 'mod_version'),
             mod_description: propertyStringCustom("modmetadata", 'mod_description'),
             mod_authors: "[${propertyStringListCustom("modmetadata", 'mod_authors', ',').join(', ')}]",
