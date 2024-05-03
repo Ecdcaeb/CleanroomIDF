@@ -109,35 +109,35 @@ void assertEnvironmentVariable(String propertyName) {
 
 
 
-String propertyStringCustom(Properties properties, String key) {
+String propertyStringCustom(String properties, String key) {
     return $propertyCustom(properties, key).toString()
 }
 
-boolean propertyBoolCustom(Properties properties, String key) {
+boolean propertyBoolCustom(String properties, String key) {
     return propertyStringCustom(properties, key).toBoolean()
 }
 
-int propertyIntegerCustom(Properties properties, String key){
+int propertyIntegerCustom(String properties, String key){
     return propertyStringCustom(properties, key).toInteger()
 }
 
-Collection<String> propertyStringListCustom(Properties properties, String key) {
+Collection<String> propertyStringListCustom(String properties, String key) {
     return propertyStringListCustom(properties, key, ' ')
 }
 
-Collection<String> propertyStringListCustom(Properties properties, String key, String delimit) {
+Collection<String> propertyStringListCustom(String properties, String key, String delimit) {
     return propertyStringCustom(properties, key).split(delimit).findAll { !it.isEmpty() }
 }
 
-private Object $propertyCustom(Properties properties, String key) {
-    def value = properties.getProperty(key)
+private Object $propertyCustom(String properties, String key) {
+    def value = project.propertiesMap.get(properties).getProperty(key)
     if (value instanceof String) {
         return interpolate(value)
     }
     return value
 }
 
-String interpolateCustom(Properties properties, String value) {
+String interpolateCustom(String properties, String value) {
     if (value.startsWith('${{') && value.endsWith('}}')) {
         value = value.substring(3, value.length() - 2)
         Binding newBinding = new Binding(this.binding.getVariables())
@@ -145,12 +145,12 @@ String interpolateCustom(Properties properties, String value) {
         return new GroovyShell(this.getClass().getClassLoader(), newBinding).evaluate(value)
     }
     if (value.contains('${')) {
-        return new SimpleTemplateEngine().createTemplate(value).make(properties).toString()
+        return new SimpleTemplateEngine().createTemplate(value).make(project.propertiesMap.get(properties)).toString()
     }
     return value
 }
 
-void assertPropertyCustom(Properties properties, String propertyName) {
+void assertPropertyCustom(String properties, String propertyName) {
     def property = propertyCustom(properties, propertyName)
     if (property == null) {
         throw new GradleException("Property ${propertyName} is not defined!")
@@ -160,7 +160,7 @@ void assertPropertyCustom(Properties properties, String propertyName) {
     }
 }
 
-void assertSubProperties(Properties properties, String propertyName, String... subPropertyNames) {
+void assertSubProperties(String properties, String propertyName, String... subPropertyNames) {
     assertProperty(properties, propertyName)
     if (propertyBool(properties, propertyName)) {
         for (String subPropertyName : subPropertyNames) {
@@ -169,7 +169,7 @@ void assertSubProperties(Properties properties, String propertyName, String... s
     }
 }
 
-void setDefaultProperty(Properties properties, String propertyName, boolean warn, defaultValue) {
+void setDefaultProperty(String properties, String propertyName, boolean warn, defaultValue) {
     def property = property(properties, propertyName)
     def exists = true
     if (property == null) {
@@ -188,7 +188,7 @@ void setDefaultProperty(Properties properties, String propertyName, boolean warn
     }
 }
 
-void assertEnvironmentVariable(Properties properties, String propertyName) {
+void assertEnvironmentVariable(String properties, String propertyName) {
     def property = System.getenv(propertyName)
     if (property == null) {
         throw new GradleException("System Environment Variable $propertyName is not defined!")
