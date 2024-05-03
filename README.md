@@ -27,7 +27,7 @@ You can edit it for you own mod build.
 
 - Clone the repository you have created with this template.
 
-- Edit `modmetadata.properties`, `gradle.properties` and `build.gradle` until it is ok.
+- Edit `version.properties`, `gradle.properties` and `build.gradle` until it is ok.
 
 - In the local repository, run the command `gradlew setupDecompWorkspace`
 
