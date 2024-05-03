@@ -9,7 +9,7 @@ There are many branchs here.
 
 `main` is the main branch
 
-`full` is the main with the codes of idf
+~~`full` is the main with the codes of idf~~
 
 the branchs start with `_` is the contribution to upstream, do not use!
 
