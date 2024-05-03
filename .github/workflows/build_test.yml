@@ -19,7 +19,8 @@ jobs:
           - name: Cache Gradle
             uses: actions/cache@v3
             with:
-              path: ~/.npm
+              path: 
+                ~/gradle/
                 ~/.gradle/
                 ~/build/
               key: ${{hashFiles('build.gradle') }}-${{hashFiles('gradle.properties') }}
@@ -46,5 +47,5 @@ jobs:
           - name: Upload Build Artifacts
             uses: actions/upload-artifact@v4
             with:
-              name: example-1.12.2-${{ steps.date.outputs.date }}- ${{ github.run_number}}
+              name: example-1.12.2-${{ steps.date.outputs.date }}-${{ github.run_number}}
               path: build/libs
