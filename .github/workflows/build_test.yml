@@ -33,7 +33,7 @@ jobs:
             id: date
             run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
           - name: Change Mod version
-            run: sed -i "s/mod_version.*=.*/mod_version = & ${{ steps.date.outputs.date }}/g" version.properties
+            run: sed -i "s/mod_version.*=.*/&-${{ steps.date.outputs.date }}/g" version.properties
           - name: Setup Java
             uses: actions/setup-java@v3
             with:
