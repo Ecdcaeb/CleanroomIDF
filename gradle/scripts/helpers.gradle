@@ -8,7 +8,15 @@ ext.interpolate = this.&interpolate as MethodClosure
 ext.assertProperty = this.&assertProperty as MethodClosure
 ext.assertSubProperties = this.&assertSubProperties as MethodClosure
 ext.setDefaultProperty = this.&setDefaultProperty as MethodClosure
-ext.assertEnvironmentVariable = this.&assertEnvironmentVariable as MethodClosure
+ext.assertEnvironmentVariable = this.&assertEnvironmentVariable as Properties, MethodClosure
+ext.propertyStringCustom = this.&propertyStringCustom as Properties, MethodClosure
+ext.propertyBoolCustom = this.&propertyBoolCustom as Properties, MethodClosure
+ext.propertyStringListCustom = this.&propertyStringListCustom as Properties, MethodClosure
+ext.interpolateCustom = this.&interpolateCustom as Properties, MethodClosure
+ext.assertPropertyCustom = this.&assertPropertyCustom as Properties, MethodClosure
+ext.assertSubPropertiesCustom = this.&assertSubPropertiesCustom as Properties, MethodClosure
+ext.setDefaultPropertyCustom = this.&setDefaultPropertyCustom as Properties, MethodClosure
+ext.assertEnvironmentVariableCustom = this.&assertEnvironmentVariableCustom as Properties, MethodClosure
 
 String propertyString(String key) {
     return $property(key).toString()
