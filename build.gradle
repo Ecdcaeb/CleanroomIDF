@@ -1,11 +1,8 @@
-Properties modmetadata = new Properties()
+ext.modmetadata = new Properties()
 modmetadata.load(new FileInputStream("modmetadata.properties"))
 
 apply from: 'gradle/scripts/helpers.gradle'
 
-assertProperty 'root_package'
-assertProperty 'mod_id'
-assertProperty 'mod_name'
 
 assertSubProperties 'use_access_transformer', 'access_transformer_locations'
 assertSubProperties 'is_coremod', 'coremod_includes_mod', 'coremod_plugin_class_name'
