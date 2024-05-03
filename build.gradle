@@ -1,11 +1,11 @@
-Properties modmetadate = new Properties()
-modmetadate.load(new FileInputStream("modmetadata.properties"))
+Properties modmetadata = new Properties()
+modmetadata.load(new FileInputStream("modmetadata.properties"))
 
 apply from: 'gradle/scripts/helpers.gradle'
-assertProperty modmetadate, 'mod_version'
-assertProperty modmetadate, 'root_package'
-assertProperty modmetadate, 'mod_id'
-assertProperty modmetadate, 'mod_name'
+assertProperty modmetadata, 'mod_version'
+assertProperty modmetadata, 'root_package'
+assertProperty modmetadata, 'mod_id'
+assertProperty modmetadata, 'mod_name'
 
 assertSubProperties 'use_access_transformer', 'access_transformer_locations'
 assertSubProperties 'is_coremod', 'coremod_includes_mod', 'coremod_plugin_class_name'
@@ -39,7 +39,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'java'
 apply plugin: 'org.spongepowered.mixin'
 
-version = "1.12.2-${project.modmetadate.mod_version}"
+version = "1.12.2-${project.modmetadata.mod_version}"
 group = root_package
 archivesBaseName = mod_name
 
@@ -85,7 +85,7 @@ minecraft {
 
 
             mods {
-                "${project.modmetadate.mod_id}" {
+                "${project.modmetadata.mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -98,7 +98,7 @@ minecraft {
 
 
             mods {
-                "${project.modmetadate.mod_id}" {
+                "${project.modmetadata.mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -196,15 +196,15 @@ tasks.named('processResources', ProcessResources).configure {
     filterList.addAll(propertyStringList('mixin_configs').collect(config -> "mixins.${config}.json" as String))
 
     var replaceProperties = [
-            mod_id: propertyString(modmetadate, 'mod_id'),
-            mod_name: propertyString(modmetadate, 'mod_name'),
-            mod_version: propertyString(modmetadate, 'mod_version'),
-            mod_description: propertyString(modmetadate, 'mod_description'),
-            mod_authors: "[${propertyStringList(modmetadate, 'mod_authors', ',').join(', ')}]",
-            mod_credits: propertyString(modmetadate, 'mod_credits'),
-            mod_url: propertyString(modmetadate, 'mod_url'),
-            mod_update_json: propertyString(modmetadate, 'mod_update_json'),
-            mod_logo_path: propertyString(modmetadate, 'mod_logo_path'),
+            mod_id: propertyString(modmetadata, 'mod_id'),
+            mod_name: propertyString(modmetadata, 'mod_name'),
+            mod_version: propertyString(modmetadata, 'mod_version'),
+            mod_description: propertyString(modmetadata, 'mod_description'),
+            mod_authors: "[${propertyStringList(modmetadata, 'mod_authors', ',').join(', ')}]",
+            mod_credits: propertyString(modmetadata, 'mod_credits'),
+            mod_url: propertyString(modmetadata, 'mod_url'),
+            mod_update_json: propertyString(modmetadata, 'mod_update_json'),
+            mod_logo_path: propertyString(modmetadata, 'mod_logo_path'),
             mixin_refmap: propertyString('mixin_refmap'),
             mixin_package: propertyString('mixin_package')
 
@@ -225,11 +225,11 @@ jar {
     manifest {
         def attribute_map = [:]
         attribute_map['Specification-Version'] = '1' // We are version 1 of ourselves
-        attribute_map['Specification-Vendor'] = "[${propertyStringList(modmetadate, 'mod_authors', ',').join(', ')}]"
+        attribute_map['Specification-Vendor'] = "[${propertyStringList(modmetadata, 'mod_authors', ',').join(', ')}]"
         attribute_map['ModType'] = 'CRL'
         attribute_map['Implementation-Title'] = project.name
-        attribute_map['Implementation-Version'] = propertyString(modmetadate, 'mod_version')
-        attribute_map['Implementation-Vendor'] = "[${propertyStringList(modmetadate, 'mod_authors', ',').join(', ')}]"
+        attribute_map['Implementation-Version'] = propertyString(modmetadata, 'mod_version')
+        attribute_map['Implementation-Vendor'] = "[${propertyStringList(modmetadata, 'mod_authors', ',').join(', ')}]"
         attribute_map['Implementation-Timestamp'] = new Date().format('yyyy-MM-dd\'T\'HH:mm:ssZ')
         if(propertyBool('is_coremod')){
             attribute_map['FMLCorePlugin'] = propertyString('coremod_plugin_class_name')

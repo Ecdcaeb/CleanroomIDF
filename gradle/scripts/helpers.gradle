@@ -9,6 +9,14 @@ ext.assertProperty = this.&assertProperty as MethodClosure
 ext.assertSubProperties = this.&assertSubProperties as MethodClosure
 ext.setDefaultProperty = this.&setDefaultProperty as MethodClosure
 ext.assertEnvironmentVariable = this.&assertEnvironmentVariable as MethodClosure
+ext.propertyStringCustom = this.&propertyStringCustom as MethodClosure
+ext.propertyBoolCustom = this.&propertyBoolCustom as MethodClosure
+ext.propertyStringListCustom = this.&propertyStringListCustom as MethodClosure
+ext.interpolateCustom = this.&interpolateCustom as MethodClosure
+ext.assertPropertyCustom = this.&assertPropertyCustom as MethodClosure
+ext.assertSubPropertiesCustom = this.&assertSubPropertiesCustom as MethodClosure
+ext.setDefaultPropertyCustom = this.&setDefaultPropertyCustom as MethodClosure
+ext.assertEnvironmentVariableCustom = this.&assertEnvironmentVariableCustom as MethodClosure
 
 String propertyString(String key) {
     return $property(key).toString()
@@ -101,27 +109,27 @@ void assertEnvironmentVariable(String propertyName) {
 
 
 
-String propertyString(Properties properties, String key) {
-    return $property(properties, key).toString()
+String propertyStringCustom(Properties properties, String key) {
+    return $propertyCustom(properties, key).toString()
 }
 
-boolean propertyBool(Properties properties, String key) {
-    return propertyString(properties, key).toBoolean()
+boolean propertyBoolCustom(Properties properties, String key) {
+    return propertyStringCustom(properties, key).toBoolean()
 }
 
-int propertyInteger(Properties properties, String key){
-    return propertyString(properties, key).toInteger()
+int propertyIntegerCustom(Properties properties, String key){
+    return propertyStringCustom(properties, key).toInteger()
 }
 
-Collection<String> propertyStringList(Properties properties, String key) {
-    return propertyStringList(properties, key, ' ')
+Collection<String> propertyStringListCustom(Properties properties, String key) {
+    return propertyStringListCustom(properties, key, ' ')
 }
 
-Collection<String> propertyStringList(Properties properties, String key, String delimit) {
-    return propertyString(properties, key).split(delimit).findAll { !it.isEmpty() }
+Collection<String> propertyStringListCustom(Properties properties, String key, String delimit) {
+    return propertyStringCustom(properties, key).split(delimit).findAll { !it.isEmpty() }
 }
 
-private Object $property(Properties properties, String key) {
+private Object $propertyCustom(Properties properties, String key) {
     def value = properties.getProperty(key)
     if (value instanceof String) {
         return interpolate(value)
@@ -129,7 +137,7 @@ private Object $property(Properties properties, String key) {
     return value
 }
 
-String interpolate(Properties properties, String value) {
+String interpolateCustom(Properties properties, String value) {
     if (value.startsWith('${{') && value.endsWith('}}')) {
         value = value.substring(3, value.length() - 2)
         Binding newBinding = new Binding(this.binding.getVariables())
@@ -142,8 +150,8 @@ String interpolate(Properties properties, String value) {
     return value
 }
 
-void assertProperty(Properties properties, String propertyName) {
-    def property = property(properties, propertyName)
+void assertPropertyCustom(Properties properties, String propertyName) {
+    def property = propertyCustom(properties, propertyName)
     if (property == null) {
         throw new GradleException("Property ${propertyName} is not defined!")
     }
