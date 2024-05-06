@@ -32,8 +32,8 @@ jobs:
           - name: Get current date
             id: date
             run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-          - name: Change Mod version
-            run: sed -i "a/mod_version.*=.*/-${{ steps.date.outputs.date }}/" version.properties
+          - name: Change mod version
+            run: sed -i "s/mod_version.*=.*/mod_version = ${{ steps.date.outputs.date }}/g"  version.properties
           - name: Setup Java
             uses: actions/setup-java@v3
             with:
