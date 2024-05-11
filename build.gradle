@@ -50,7 +50,7 @@ archivesBaseName = project.mod_name
 
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(propertyInteger('java_version'))
-jarSigner.autoDetect(archivesBaseName)
+jarSigner.autoDetect('example')
 
 minecraft {
 
