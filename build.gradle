@@ -40,6 +40,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'java'
 apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'net.minecraftforge.gradlejarsigner'
 
 version = "1.12.2-${versiondata.mod_version}"
 group = project.root_package
@@ -48,6 +49,7 @@ archivesBaseName = project.mod_name
 
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(propertyInteger('java_version'))
+jarSigner.autoDetect(archivesBaseName)
 
 minecraft {
 
@@ -250,6 +252,7 @@ jar {
 
         attributes(attribute_map)
     }
+    jarSigner.sign(it)
 }
 
 jar.finalizedBy('reobfJar')
