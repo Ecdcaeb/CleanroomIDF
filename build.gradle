@@ -29,7 +29,7 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.10.+', changing: true
-        classpath "net.minecraftforge.gradlejarsigner"
+        classpath "net.minecraftforge:gradlejarsigner"
         classpath "org.spongepowered:mixingradle:0.7.+"
     }
 }
@@ -50,7 +50,7 @@ archivesBaseName = project.mod_name
 
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(propertyInteger('java_version'))
-jarSigner.autoDetect('example')
+jarSigner.autoDetect(archivesBaseName)
 
 minecraft {
 
