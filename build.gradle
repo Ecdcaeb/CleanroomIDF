@@ -1,11 +1,9 @@
-Properties versiondata = new Properties()
-versiondata.load(new FileInputStream("version.properties"))
-
 apply from: 'gradle/scripts/helpers.gradle'
 
 assertProperty 'root_package'
 assertProperty 'mod_id'
 assertProperty 'mod_name'
+assertProperty 'mod_version'
 
 assertSubProperties 'use_access_transformer', 'access_transformer_locations'
 assertSubProperties 'is_coremod', 'coremod_includes_mod', 'coremod_plugin_class_name'
@@ -51,14 +49,32 @@ apply plugin: 'java'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'net.minecraftforge.gradlejarsigner'
 
-version = "1.12.2-${versiondata.mod_version}"
+version = "1.12.2-${propertyString("mod_version")}"
 group = project.root_package
 archivesBaseName = project.mod_name
 
 
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(propertyInteger('java_version'))
-jarSigner.autoDetect(archivesBaseName)
+// You can either manually configure the information by pulling the secrets yourself, or I added a simple helper jarSigner.autoDetect() which which search the following locations in order:
+
+// if (prefix != null) {
+//     project.findProperty(prefix + '.' + prop)
+//     System.getenv(prefix + '.' + prop)
+// }
+// project.findProperty(prop)
+// System.getenv(prop)
+// prefix defaults to project.name you can override by calling jarSigner.autoDetect('prefix')
+
+// For the following properties:
+
+// jarSigner {
+//     alias = 'SIGN_KEY_ALIAS'
+//     keyPass = 'SIGN_KEY_PASSWORD'
+//     storePass = 'SIGN_KEYSTORE_PASSWORD'
+//     keyStoreData = 'SIGN_KEYSTORE_DATA'
+// }
+jarSigner.autoDetect(project.mod_id)
 
 minecraft {
 
@@ -212,7 +228,7 @@ tasks.named('processResources', ProcessResources).configure {
     var replaceProperties = [
             mod_id: propertyString('mod_id'),
             mod_name: propertyString('mod_name'),
-            mod_version: version,
+            mod_version: propertyString('version'),
             mod_description: propertyString('mod_description'),
             mod_authors: "[${propertyStringList('mod_authors', ',').join(', ')}]",
             mod_credits: propertyString('mod_credits'),
@@ -242,7 +258,7 @@ jar {
         attribute_map['Specification-Vendor'] = "[${propertyStringList('mod_authors', ',').join(', ')}]"
         attribute_map['ModType'] = 'CRL'
         attribute_map['Implementation-Title'] = project.name
-        attribute_map['Implementation-Version'] = version
+        attribute_map['Implementation-Version'] = project.version
         attribute_map['Implementation-Vendor'] = "[${propertyStringList('mod_authors', ',').join(', ')}]"
         attribute_map['Implementation-Timestamp'] = new Date().format('yyyy-MM-dd\'T\'HH:mm:ssZ')
         if(propertyBool('is_coremod')){
@@ -259,7 +275,12 @@ jar {
             attribute_map['FMLAT']= project.access_transformer_locations
         }
         if(propertyBool('use_mixin')){
-            attribute_map['MixinConfigs'] = project.mixin_configs;
+            StringBuilder mixins = new StringBuilder();
+            for(String s : propertyStringList('mixin_configs').collect(config -> "mixins.${config}.json" as String)){
+                mixins.append(s).append(',');
+            }
+            mixins.deleteCharAt(mixins.length()-1);
+            attribute_map['MixinConfigs'] = mixins.toString();
         }
 
         attributes(attribute_map)
