@@ -94,8 +94,18 @@ minecraft {
     }
     
     runs {
+
+        if (propertyBool('use_mixins')) {
+            jvmArgs << '-Dmixin.hotSwap=true'
+            jvmArgs << '-Dmixin.checks.interfaces=true'
+            jvmArgs << '-Dmixin.debug.export=true'
+        }
+        
         // applies to all the run configs below
         configureEach {
+
+
+
             // Recommended logging data for a userdev environment
             // The markers can be added/remove as needed separated by commas.
             // "SCAN": For mods scan.
