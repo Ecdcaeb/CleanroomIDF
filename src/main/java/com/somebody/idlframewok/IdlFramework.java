@@ -60,7 +60,7 @@ public class IdlFramework {
     }
 
     @EventHandler
-    public static void Init(FMLInitializationEvent event) {
+    public void modInit(FMLInitializationEvent event) {
         ModRecipes.Init();
         RegisterTileEntity();
         RegistryHandler.initRegistries(event);
@@ -100,7 +100,7 @@ public class IdlFramework {
     }
 
     @EventHandler
-    public static void serverInit(FMLServerStartingEvent event) {
+    public void serverInit(FMLServerStartingEvent event) {
         RegistryHandler.serverRegistries(event);
     }
 
